@@ -1,0 +1,118 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Deepfake Detection</title>  
+    <style>  
+        body {  
+            font-family: Arial, sans-serif;  
+            background-color: #f4f4f4;  
+            text-align: center;  
+            padding: 20px;  
+        }  
+        #imagePreview {  
+            max-width: 400px;  
+            margin: 20px auto;  
+            display: none;  
+            border-radius: 5px;  
+        }  
+        #uploadButton, #predictButton {  
+            background-color: #4CAF50;  
+            color: white;  
+            padding: 10px 20px;  
+            border: none;  
+            border-radius: 5px;  
+            cursor: pointer;  
+            font-size: 16px;  
+            margin: 10px;  
+        }  
+        #uploadButton:hover, #predictButton:hover {  
+            background-color: #45a049;  
+        }  
+        #result {  
+            margin-top: 20px;  
+            padding: 15px;  
+            border-radius: 5px;  
+            text-align: center;  
+            font-size: 18px;  
+            display: none;  
+        }  
+        .loading {  
+            display: none;  
+            text-align: center;  
+            margin: 20px 0;  
+        }  
+    </style>  
+</head>  
+<body>  
+
+<h1>Deepfake Detection</h1>  
+<div>  
+    <input type="file" id="imageInput" accept="image/*" style="display: none;">  
+    <button id="uploadButton">Upload Image</button>  
+    <button id="predictButton" style="display: none;">Predict</button>  
+</div>  
+<img id="imagePreview" alt="Preview">  
+<div class="loading">Analyzing image...</div>  
+<div id="result"></div>  
+
+<script>  
+    const uploadButton = document.getElementById('uploadButton');  
+    const predictButton = document.getElementById('predictButton');  
+    const imageInput = document.getElementById('imageInput');  
+    const imagePreview = document.getElementById('imagePreview');  
+    const resultDiv = document.getElementById('result');  
+    const loadingDiv = document.querySelector('.loading');  
+
+    uploadButton.addEventListener('click', () => {  
+        imageInput.click();  
+    });  
+
+    imageInput.addEventListener('change', (event) => {  
+        const file = event.target.files[0];  
+        if (file) {  
+            const reader = new FileReader();  
+            reader.onload = function(e) {  
+                imagePreview.src = e.target.result;  
+                imagePreview.style.display = 'block';  
+                predictButton.style.display = 'inline-block';  
+            };  
+            reader.readAsDataURL(file);  
+        }  
+    });  
+
+    predictButton.addEventListener('click', async () => {  
+        const file = imageInput.files[0];  
+        if (file) {  
+            const formData = new FormData();  
+            formData.append('file', file);  
+
+            loadingDiv.style.display = 'block';  
+            resultDiv.style.display = 'none';  
+
+            try {  
+                const response = await fetch('/predict', {  
+                    method: 'POST',  
+                    body: formData  
+                });  
+
+                if (!response.ok) {  
+                    throw new Error('Network response was not ok');  
+                }  
+
+                const result = await response.json();  
+                resultDiv.textContent = `Prediction: ${result.prediction} (Confidence: ${(result.confidence * 100).toFixed(2)}%)`;  
+                resultDiv.style.display = 'block';  
+            } catch (error) {  
+                resultDiv.textContent = 'Error: ' + error.message;  
+                resultDiv.style.display = 'block';  
+            } finally {  
+                loadingDiv.style.display = 'none';  
+            }  
+        }  
+    });  
+</script>  
+
+</body>  
+</html>

@@ -1,0 +1,36 @@
+
+
+mvenv/
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.swp
+*.swo
+.DS_Store
+venv/
+.env
+.Python
+migrations/
+debug.log
+*.sqlite3
+
+# React
+node_modules/
+dist/
+build/
+.env
+.npm/
+.next/
+yarn.lock
+package-lock.json
+public/static/
+.cache/
+
+# General IDE/Editor files
+.vscode/
+.idea/
+*.iml
+*.log
