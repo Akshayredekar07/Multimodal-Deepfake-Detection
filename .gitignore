@@ -2,7 +2,8 @@
 
 mvenv/
 
-
+FaceData/
+real_time_detection/dataset/
 # Python
 __pycache__/
 *.py[cod]
@@ -34,3 +35,4 @@ public/static/
 .idea/
 *.iml
 *.log
+runs/

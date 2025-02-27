@@ -4,7 +4,7 @@ from model import BiLSTM_Attention
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = BiLSTM_Attention(input_dim=40).to(device)
-model.load_state_dict(torch.load("best_model_gpu.pth", map_location=device))
+model.load_state_dict(torch.load("best_model_cpu.pth", map_location=device))
 model.eval()
 
 # Convert to TorchScript

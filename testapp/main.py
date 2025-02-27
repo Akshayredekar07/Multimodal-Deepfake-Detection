@@ -117,7 +117,7 @@ app = FastAPI()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load the model
-model_path = "best_model_gpu.pth"
+model_path = "best_model_cpu.pth"
 input_dim = 40  # Ensure this matches the input dimension of your model
 model = BiLSTM_Attention(input_dim=input_dim).to(device)
 
@@ -125,9 +125,9 @@ model = BiLSTM_Attention(input_dim=input_dim).to(device)
 try:
     model.load_state_dict(torch.load(model_path, map_location=device), strict=False)
     model.eval()  # Set model to evaluation mode
-    print("✅ Model loaded successfully!")
+    print("Model loaded successfully!")
 except Exception as e:
-    print(f"⚠️ Error loading model: {e}")
+    print(f"Error loading model: {e}")
 
 # Define a simple route to check the API
 @app.get("/")
